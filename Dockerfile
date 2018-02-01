@@ -21,18 +21,9 @@ RUN echo "root:`date +%s | sha256sum | base64 | head -c 32 ; echo`" | chpasswd &
     mkdir -p /var/run/sshd /var/log/supervisor && \
     chmod 755 /usr/local/bin/supervisord /usr/local/bin/disable_ssh_password_auth /usr/local/bin/createusers.sh && \
     sed -i 's/.*\[supervisord\].*/&\nnodaemon=true\nloglevel=debug/' /etc/supervisor/supervisord.conf && \
-    sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
-
-
-#    useradd -m -g users -G sudo -s /bin/bash ${CONTAINER_LOGIN} && echo "${CONTAINER_LOGIN}:${CONTAINER_PASSWORD}" | chpasswd && \
-#    sed -i "s/<username>/${CONTAINER_LOGIN}/g" /usr/local/bin/supervisord && \
-#    sed -i "s/<username>/${CONTAINER_LOGIN}/g" /usr/local/bin/check_ssh_security && \
-#    sed -i "s/<username>/${CONTAINER_LOGIN}/g" /usr/local/bin/disable_ssh_password_auth && \
-#    echo "${CONTAINER_LOGIN} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${CONTAINER_LOGIN} && \
-#    chage -d 0 ${CONTAINER_LOGIN} && ln -s /tmp /home/${CONTAINER_LOGIN}/tmp && \
-#    chown -R ${CONTAINER_LOGIN}:users /home/${CONTAINER_LOGIN} && chmod 700 /home/${CONTAINER_LOGIN} && \
-#    mkdir -p /data && chown ${CONTAINER_LOGIN}:users /data && \
-#    rm -fr /tmp/*
+    sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd && \
+    mkdir -p /data && chown root:users /data && \
+    rm -fr /tmp/*
 
 #--- Launch supervisord daemon
 EXPOSE 22
